@@ -29,4 +29,11 @@ if you have python2 successfully installed, then you simply can run `python ./pe
 In line `10 GAMESPEED = 30` you can change the game speed. With a higher number the game will run slower, so you habe more time to react to you pet
 
 
+
+# TODO
+* add a minigame
+* add more ascii art fish sleeping, feeding.....
+* add ascii background
+
 # SCREENSHOTS
+* TODO
