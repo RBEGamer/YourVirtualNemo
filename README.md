@@ -24,4 +24,9 @@
 
 # INSTALLATION
 if you have python2 successfully installed, then you simply can run `python ./pet.py` to start the game.
+
+## GameSpeed
+In line `10 GAMESPEED = 30` you can change the game speed. With a higher number the game will run slower, so you habe more time to react to you pet
+
+
 # SCREENSHOTS
