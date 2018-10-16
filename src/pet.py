@@ -250,19 +250,20 @@ class pypet:
         if self.hunger >= 80 and not self.hunger_phrase_spoken:
             print(bcolors.HEADER + str(random.choice(self.phrase_hunger)) + bcolors.ENDC)
             self.hunger_phrase_spoken = True
-        if self.hunger >= 99:
+        if self.hunger < 0.0:
+            self.hunger = 0.0
+        if self.hunger >= 99.0:
             self.health = self.health - 10.0
 
         #HEALTH LOGIC
         if self.health <= 0.0 and not self.dead:
             self.dead = True
-        if self.health <= 90:#wenn gesundheit angeschlagen gehe schneller nach 0
+        if self.health <= 30:#wenn gesundheit angeschlagen gehe schneller nach 0
             tmp = self.health * 0.01
             tmp = 1.0 - tmp
-            if tmp <= 0.8:
+            if tmp < 0.8:
                 tmp = 0.8
-            
-            self.health = self.health * tmp
+            self.health = self.health-(self.health*tmp) -0.1
 
 
         #HYGIENE LOGIC
@@ -271,19 +272,19 @@ class pypet:
         if self.hygiene <= 20.0 and not self.hygiene_phrase_spoken:
             print(bcolors.HEADER + str(random.choice(self.phrase_hygiene)) + bcolors.ENDC)
             self.hygiene_phrase_spoken = True
-        if self.hygiene <= 0.0:
+        if self.hygiene >= 0.0:
             self.health = self.health - 2.0
-            if self.health <= 0.0:
-                self.health = 0.0
+        if self.health < 0.0:
+            self.health = 0.0
 
         
         #rested LOGIC
         if self.rested >= 0.0:
             self.rested = self.rested - 4.0
-        if self.rested <= 0.0:
+        if self.rested <= 0.5:
             self.health = self.health - 10.0
-            if self.health <= 0.0:
-                self.health = 0.0
+        if self.rested < 0.0:
+            self.rested = 0.0
 
         #happynes logic if happy get health
         if self.happines <= 100.0:
@@ -294,6 +295,8 @@ class pypet:
             self.health = self.health+tmp
             if self.health >= 100.0:
                 self.health = 100.0
+        if self.happines < 0.0:
+            self.happines = 0.0
 
 
         #PLAY NUR WENN rested > 50
@@ -384,7 +387,7 @@ def update_thread_func(threadName, delay):
     while 1:  
         time.sleep(delay)
         pet.update()
-start_new_thread( update_thread_func, ("Thread-1", 5, ))#5 is the step delay -> bigger the game runs slower
+start_new_thread( update_thread_func, ("Thread-1", 1, ))#5 is the step delay -> bigger the game runs slower
 
 
 
@@ -396,7 +399,7 @@ while 1:
     cls()
 
     if s == "":
-        pass
+        pet.input_cmd("status")
     else:
         pet.input_cmd(s)
 
