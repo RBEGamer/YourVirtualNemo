@@ -13,13 +13,13 @@
 * save/loading different pets /savestate browser
 
 # COMMANDS
-* print("h -> this help page")
-* print("status -> get health/hunger bars")
-* print("save -> save your pet as a file")
-* print("load -> load a file to load a pet")
-* print("feed -> feed the fish")
-* print("sleep -> zzzzZZzzZzzzZZz")
-* print("play -> have some fun")
+* help -> this help page
+* status -> get health/hunger bars
+* save -> save your pet as a file
+* load -> load a file to load a pet
+* feed -> feed the fish
+* sleep -> zzzzZZzzZzzzZZz
+* play -> have some fun
 
 
 # INSTALLATION
