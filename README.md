@@ -15,3 +15,10 @@
 * automatic stock alerts
 * automatic inventur system
 * RSS Feed integration for project updates
+
+
+# COMMANDS
+* help - SHOWS HELP PAGE
+* status - SHOWS YOUR PETS STATUS
+
+# SCREENSHOTS
