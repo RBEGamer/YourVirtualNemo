@@ -22,4 +22,7 @@
 * print("sleep -> zzzzZZzzZzzzZZz")
 * print("play -> have some fun")
 
+
+# INSTALLATION
+if you have python2 successfully installed, then you simply can run `python ./pet.py` to start the game.
 # SCREENSHOTS
