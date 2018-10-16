@@ -12,7 +12,6 @@
 * simple user interface
 * save/loading different pets /savestate browser
 
-
 # COMMANDS
 * print("h -> this help page")
 * print("status -> get health/hunger bars")
