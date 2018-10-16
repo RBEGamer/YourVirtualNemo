@@ -18,7 +18,12 @@
 
 
 # COMMANDS
-* help - SHOWS HELP PAGE
-* status - SHOWS YOUR PETS STATUS
+* print("h -> this help page")
+* print("status -> get health/hunger bars")
+* print("save -> save your pet as a file")
+* print("load -> load a file to load a pet")
+* print("feed -> feed the fish")
+* print("sleep -> zzzzZZzzZzzzZZz")
+* print("play -> have some fun")
 
 # SCREENSHOTS
