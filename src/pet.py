@@ -228,7 +228,7 @@ class pypet:
         #DEAD LOGIC
         if self.dead:
             print(bcolors.FAIL + "--- RIP ---" + bcolors.ENDC)
-            print(bcolors.HEADER + str(random.choice(self.dead_phrase_spoken)).replace("%name",str(self.name)) + bcolors.ENDC)
+            print(bcolors.HEADER + str(random.choice(self.phrase_dead)).replace("%name",str(self.name)) + bcolors.ENDC)
             print(bcolors.FAIL + "--- RIP ---" + bcolors.ENDC)
             return
 
@@ -258,10 +258,10 @@ class pypet:
         #HYGIENE LOGIC
         if self.hygiene >= 0.0:
             self.hygiene = self.hygiene - 0.5
-        if self.hygiene <= 20 and not self.hygiene_phrase_spoken:
+        if self.hygiene <= 20.0 and not self.hygiene_phrase_spoken:
             print(bcolors.HEADER + str(random.choice(self.phrase_hygiene)) + bcolors.ENDC)
             self.hygiene_phrase_spoken = True
-        if self.hygiene >= 99:
+        if self.hygiene <= 0.0:
             self.health = self.health - 2.0
 
         
