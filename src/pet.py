@@ -31,10 +31,18 @@ def cls():
 class pypet:
 
     #PHRASES THE PET CAN SAY FOR SPECIFIC ACTIONS
-    phrase_hunger = ["Im hungry", "Give me food!!!!"]
+    phrase_hunger = ["Im hungry", "Give me food!!!!", "Can i have some candy ? "]
     hunger_phrase_spoken = False
 
-    phrase_saved = ["I saved my DNA to a mystery file maybe the file is called: %file"]
+    phrase_feed = ["Oh yes some fish flakes", "Hmm rotten fish food, thank you man!"]
+    phrase_saved = ["I saved my DNA to a mystery file maybe the file is called: %file", "OH YEAH! MY DNA IS SAVED %file"]
+    phrase_invalid_cmd = ["Oh no i cant do that", "THATS WROOONG", "Daddy, can we do other stuff now","Mummy, can we do other stuff now"]
+
+    phrase_dead = ["Im dead! THANK YOU!", "RIP %name"]
+    dead_phrase_spoken = False
+
+    phrase_hygiene = ["Clean me UP!", "I pooped in the Graden! Clean me!"]
+    hygiene_phrase_spoken = False
     #STAT VARIABLES FOR YOUR PET
     uuid = ""
     name = ""
@@ -68,6 +76,10 @@ class pypet:
         self.update_lock = allocate_lock()
         self.save_file_path = self.save_file_base_dir+"/pet_" + str(self.uuid).replace("-", "") + ".json"
 
+
+        self.dead_phrase_spoken = False
+        self.hunger_phrase_spoken = False
+        self.hygiene_phrase_spoken = False
 
         if _load_config == False:
             print("#################")
@@ -181,6 +193,12 @@ class pypet:
                 self.health = data['health']
                 self.rested = data['rested']
                 print(bcolors.OKGREEN +"YEAH! Your pet:"+ self.name + " was loaded"+ bcolors.ENDC)
+
+                #IMPORTANT RESET SPOKEN VARS AFTER LOADING
+                self.save_file_path = self.save_file_base_dir+"/pet_" + str(self.uuid).replace("-", "") + ".json"
+                self.dead_phrase_spoken = False
+                self.hunger_phrase_spoken = False
+                self.hygiene_phrase_spoken = False
         except:
             print(bcolors.FAIL +matched_files[int(s)]+" can not be loaded."+ bcolors.ENDC)
        
@@ -206,8 +224,47 @@ class pypet:
     #UPDATE FUNC FROM THREAD
     def update(self):
         self.update_lock.acquire()
+
+        #DEAD LOGIC
         if self.dead:
-            pass
+            print(bcolors.FAIL + "--- RIP ---" + bcolors.ENDC)
+            print(bcolors.HEADER + str(random.choice(self.dead_phrase_spoken)).replace("%name",str(self.name)) + bcolors.ENDC)
+            print(bcolors.FAIL + "--- RIP ---" + bcolors.ENDC)
+            return
+
+
+
+        #FOOD LOGIC
+        if self.hunger <= 100:
+            self.hunger = self.hunger + 0.1
+        if self.hunger >= 80 and not self.hunger_phrase_spoken:
+            print(bcolors.HEADER + str(random.choice(self.phrase_hunger)) + bcolors.ENDC)
+            self.hunger_phrase_spoken = True
+        if self.hunger >= 99:
+            self.health = self.health - 10.0
+
+        #HEALTH LOGIC
+        if self.health <= 0.0 and not self.dead:
+            self.dead = True
+
+        if self.health <= 90:#wenn gesundheit angeschlagen gehe schneller nach 0
+            tmp = self.health * 0.01
+            tmp = 1.0 - tmp
+            if tmp <= 0.8:
+                tmp = 0.8
+            self.health = self.health * tmp
+
+
+        #HYGIENE LOGIC
+        if self.hygiene >= 0.0:
+            self.hygiene = self.hygiene - 0.5
+        if self.hygiene <= 20 and not self.hygiene_phrase_spoken:
+            print(bcolors.HEADER + str(random.choice(self.phrase_hygiene)) + bcolors.ENDC)
+            self.hygiene_phrase_spoken = True
+        if self.hygiene >= 99:
+            self.health = self.health - 2.0
+
+        
             #TODO EVENT SYSTEM
         #update age with alvice since
         #update all other stuff according to age and so on
@@ -220,8 +277,13 @@ class pypet:
         print("status -> get health/hunger bars")
         print("save -> save your pet as a file")
         print("load -> load a file to load a pet")
+        print("feed -> feed the fish")
 
-        
+    def show_pet_feed(self):
+        self.hunger = self.hunger - 20.0
+        if self.hunger >= 100.0:
+            self.hunger = 100.0
+        print(bcolors.HEADER + str(random.choice(self.phrase_feed)) + bcolors.ENDC)
        
 
     def input_cmd(self, cmd):
@@ -235,8 +297,10 @@ class pypet:
             self.load_pet()
         elif cmd == "help":
             self.show_pet_help()
+        elif cmd == "feed":
+            self.show_pet_feed()
         else:
-            print(bcolors.FAIL +"this cmd is invalid"+ bcolors.ENDC)
+            print(bcolors.FAIL +str(random.choice(self.phrase_invalid_cmd))+ bcolors.ENDC)
         self.show_pet()
         self.update_lock.release()
 
@@ -261,7 +325,7 @@ def update_thread_func(threadName, delay):
     while 1:  
         time.sleep(delay)
         pet.update()
-start_new_thread( update_thread_func, ("Thread-1", 5, ))
+start_new_thread( update_thread_func, ("Thread-1", 5, ))#5 is the step delay -> bigger the game runs slower
 
 
 
