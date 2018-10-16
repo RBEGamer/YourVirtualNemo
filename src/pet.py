@@ -43,6 +43,13 @@ class pypet:
 
     phrase_hygiene = ["Clean me UP!", "I pooped in the Graden! Clean me!"]
     hygiene_phrase_spoken = False
+
+
+    phrase_rested = ["ZZzZZzZzZz","zzZzZzzZzzZZZZZzZz", "zzZZzzzzZZZZzzZz", "zzZZzzZzzZzZzzzzzZz"]
+
+    phrase_play = ["this was so much fun!", "Can we play a game", "YEAHAHS"]
+
+    phrase_need_sleep = ["I need some sleep"]
     #STAT VARIABLES FOR YOUR PET
     uuid = ""
     name = ""
@@ -175,6 +182,9 @@ class pypet:
         if not s:
             print(bcolors.FAIL +"the given load index is invalid, please try again"+ bcolors.ENDC)
             return
+        if not str(s).isdigit:
+            print(bcolors.FAIL +"the given load index is invalid, please try again"+ bcolors.ENDC)
+            return
         if not matched_files[int(s)]:
             print(bcolors.FAIL +"the given load index is invalid, please try again"+ bcolors.ENDC)
             return
@@ -246,12 +256,12 @@ class pypet:
         #HEALTH LOGIC
         if self.health <= 0.0 and not self.dead:
             self.dead = True
-
         if self.health <= 90:#wenn gesundheit angeschlagen gehe schneller nach 0
             tmp = self.health * 0.01
             tmp = 1.0 - tmp
             if tmp <= 0.8:
                 tmp = 0.8
+            
             self.health = self.health * tmp
 
 
@@ -263,8 +273,31 @@ class pypet:
             self.hygiene_phrase_spoken = True
         if self.hygiene <= 0.0:
             self.health = self.health - 2.0
+            if self.health <= 0.0:
+                self.health = 0.0
 
         
+        #rested LOGIC
+        if self.rested >= 0.0:
+            self.rested = self.rested - 4.0
+        if self.rested <= 0.0:
+            self.health = self.health - 10.0
+            if self.health <= 0.0:
+                self.health = 0.0
+
+        #happynes logic if happy get health
+        if self.happines <= 100.0:
+            tmp = self.happines * 0.01
+            tmp = 1.0 + tmp
+            if tmp > 1.3:
+                tmp = 1.3
+            self.health = self.health+tmp
+            if self.health >= 100.0:
+                self.health = 100.0
+
+
+        #PLAY NUR WENN rested > 50
+
             #TODO EVENT SYSTEM
         #update age with alvice since
         #update all other stuff according to age and so on
@@ -278,12 +311,34 @@ class pypet:
         print("save -> save your pet as a file")
         print("load -> load a file to load a pet")
         print("feed -> feed the fish")
+        print("sleep -> zzzzZZzzZzzzZZz")
+        print("play -> habe some fun")
 
     def show_pet_feed(self):
         self.hunger = self.hunger - 20.0
         if self.hunger >= 100.0:
             self.hunger = 100.0
         print(bcolors.HEADER + str(random.choice(self.phrase_feed)) + bcolors.ENDC)
+
+
+    def show_pet_sleep(self):
+        self.rested = self.rested + 20.0
+        if self.rested >= 100.0:
+            self.rested = 100.0
+        print(bcolors.HEADER + str(random.choice(self.phrase_rested)) + bcolors.ENDC)
+
+    def show_pet_fun(self):
+        if self.rested <= 40.0:
+            print(bcolors.FAIL + str(random.choice(self.phrase_play)) + bcolors.ENDC)
+            return
+
+        #TODO A SIMPLE GAME
+
+        self.happines = self.happines + 5.0 #TODO with point
+        if self.happines >= 100.0:
+            self.happines = 100.0
+        print(bcolors.HEADER + str(random.choice(self.phrase_play)) + bcolors.ENDC)
+
        
 
     def input_cmd(self, cmd):
@@ -299,6 +354,10 @@ class pypet:
             self.show_pet_help()
         elif cmd == "feed":
             self.show_pet_feed()
+        elif cmd == "sleep":
+            self.show_pet_sleep()
+        elif cmd == "play":
+            self.show_pet_fun()
         else:
             print(bcolors.FAIL +str(random.choice(self.phrase_invalid_cmd))+ bcolors.ENDC)
         self.show_pet()
