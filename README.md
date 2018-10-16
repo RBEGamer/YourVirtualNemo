@@ -8,13 +8,9 @@
 
 ## FEATURES
 
-* simple to use web interface
-* using nfc tag to identifiy project parts and boxes
-* easy next step monitoring
-* easy part storage manangement (barcode scanner planned)
-* automatic stock alerts
-* automatic inventur system
-* RSS Feed integration for project updates
+* colored terminal
+* simple user interface
+* save/loading different pets /savestate browser
 
 
 # COMMANDS
