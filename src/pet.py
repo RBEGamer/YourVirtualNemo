@@ -7,6 +7,11 @@ import os
 import random
 import re #regex
 
+GAMESPEED = 30 #SECONDS / STEPS HIGHER = SLOWER
+
+
+
+
 
 #THIS ARE COLOR CODES FOR THE TERMINAL, SO ITS POSSIBLE TO COLOR TEXT
 class bcolors:
@@ -309,18 +314,19 @@ class pypet:
 
 
     def show_pet_help(self):
-        print("h -> this help page")
+        print("help -> this help page")
         print("status -> get health/hunger bars")
         print("save -> save your pet as a file")
         print("load -> load a file to load a pet")
         print("feed -> feed the fish")
         print("sleep -> zzzzZZzzZzzzZZz")
-        print("play -> habe some fun")
+        print("play -> have some fun")
 
     def show_pet_feed(self):
         self.hunger = self.hunger - 20.0
         if self.hunger >= 100.0:
             self.hunger = 100.0
+        time.sleep(10)
         print(bcolors.HEADER + str(random.choice(self.phrase_feed)) + bcolors.ENDC)
 
 
@@ -328,6 +334,7 @@ class pypet:
         self.rested = self.rested + 20.0
         if self.rested >= 100.0:
             self.rested = 100.0
+        time.sleep(10)
         print(bcolors.HEADER + str(random.choice(self.phrase_rested)) + bcolors.ENDC)
 
     def show_pet_fun(self):
@@ -340,6 +347,7 @@ class pypet:
         self.happines = self.happines + 5.0 #TODO with point
         if self.happines >= 100.0:
             self.happines = 100.0
+        time.sleep(10)
         print(bcolors.HEADER + str(random.choice(self.phrase_play)) + bcolors.ENDC)
 
        
@@ -387,7 +395,7 @@ def update_thread_func(threadName, delay):
     while 1:  
         time.sleep(delay)
         pet.update()
-start_new_thread( update_thread_func, ("Thread-1", 1, ))#5 is the step delay -> bigger the game runs slower
+start_new_thread( update_thread_func, ("Thread-1", GAMESPEED, ))#5 is the step delay -> bigger the game runs slower
 
 
 
